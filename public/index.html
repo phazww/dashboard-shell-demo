@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Shell demo</title>
+  <link rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <a class="visually-hidden-focusable skip-link" href="#main">Перейти к содержимому</a>
+
+  <header class="topbar navbar bg-body border-bottom sticky-top px-3" data-testid="topbar">
+    <div class="d-flex align-items-center gap-2 min-w-0">
+      <button class="btn btn-outline-secondary d-lg-none" type="button" id="menu-toggle"
+              data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar"
+              aria-label="Открыть меню">
+        <span class="menu-icon" aria-hidden="true"></span>
+      </button>
+      <a class="navbar-brand fw-semibold mb-0 text-truncate" href="/dashboard" data-route>Shell Demo</a>
+    </div>
+
+    <div class="dropdown ms-auto">
+      <button class="btn btn-outline-primary dropdown-toggle" type="button" id="context-toggle"
+              data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="visually-hidden">Рабочий контекст:</span>
+        <span id="context-label" class="context-label d-inline-block align-bottom text-truncate"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" id="context-menu" aria-labelledby="context-toggle"></ul>
+    </div>
+  </header>
+
+  <div class="shell d-lg-flex">
+    <div class="offcanvas-lg offcanvas-start sidebar" tabindex="-1" id="sidebar" aria-labelledby="sidebar-title">
+      <div class="offcanvas-header border-bottom">
+        <h2 class="offcanvas-title h5" id="sidebar-title">Меню</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebar"
+                aria-label="Закрыть меню"></button>
+      </div>
+      <div class="offcanvas-body p-3">
+        <nav aria-label="Основная навигация" id="main-nav"></nav>
+      </div>
+    </div>
+
+    <div class="content flex-grow-1 min-w-0">
+      <main id="main" tabindex="-1" class="p-3 p-md-4">
+        <nav aria-label="Хлебные крошки" id="breadcrumbs"></nav>
+        <div id="view"></div>
+      </main>
+    </div>
+  </div>
+
+  <div class="visually-hidden" role="status" id="live"></div>
+
+  <script src="/vendor/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
