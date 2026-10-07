@@ -1,11 +1,12 @@
 import { getActive, getContexts, setActive } from './state.js';
+import { withBase } from './base.js';
 
 const card = (title, text, href) => `
   <div class="card h-100">
     <div class="card-body">
       <h2 class="h5 card-title">${title}</h2>
       <p class="card-text text-body-secondary">${text}</p>
-      <a href="${href}" data-route class="btn btn-outline-primary btn-sm">Открыть</a>
+      <a href="${withBase(href)}" data-route class="btn btn-outline-primary btn-sm">Открыть</a>
     </div>
   </div>`;
 
@@ -79,7 +80,7 @@ export function renderProfile(view) {
   });
   const links = document.createElement('p');
   links.className = 'mt-3';
-  links.innerHTML = '<a href="/dashboard/profile/professional" data-route>Перейти к профессиональным данным</a>';
+  links.innerHTML = `<a href="${withBase('/dashboard/profile/professional')}" data-route>Перейти к профессиональным данным</a>`;
   view.append(links);
 }
 

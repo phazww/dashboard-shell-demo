@@ -18,6 +18,10 @@ npm run lint
 npm test         # все тесты, 3 браузера
 ```
 
+Живая версия: https://phazww.github.io/dashboard-shell-demo/
+
+Статическая сборка для GitHub Pages: `npm run build:pages` (папка `dist`), проверка собранной версии: `node scripts/smoke-pages.mjs <адрес с базовым путём>`.
+
 ## Что проверяют тесты
 
 `tests/menu-behavior.spec.js`, мобильный Offcanvas: открытие, Esc, клик по backdrop, кнопка закрытия, возврат фокуса на кнопку меню, focus trap (Tab и Shift+Tab), закрытие при переходе, фокус на заголовок новой страницы, кнопка Назад, расширение окна до desktop при открытом меню. Desktop: sidebar, skip link, переключатель контекста, 404.

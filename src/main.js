@@ -1,5 +1,6 @@
 import { routes, findRoute, breadcrumbTrail } from './routes.js';
 import { getActive, getContexts, onContextChange, setActive } from './state.js';
+import { withBase, stripBase, currentPath } from './base.js';
 
 const { Offcanvas } = window.bootstrap;
 
@@ -14,7 +15,7 @@ function renderNav(currentPath) {
   const link = (r) => {
     const isCurrent = r.path === currentPath;
     const isAncestor = !isCurrent && currentPath.startsWith(`${r.path}/`) && r.path !== '/dashboard';
-    return `<a class="nav-link${isAncestor ? ' is-ancestor' : ''}" href="${r.path}" data-route${isCurrent ? ' aria-current="page"' : ''}>${r.nav}</a>`;
+    return `<a class="nav-link${isAncestor ? ' is-ancestor' : ''}" href="${withBase(r.path)}" data-route${isCurrent ? ' aria-current="page"' : ''}>${r.nav}</a>`;
   };
   const top = routes.filter((r) => !r.path.endsWith('/professional'));
   const professional = routes.find((r) => r.path.endsWith('/professional'));
@@ -34,7 +35,7 @@ function renderBreadcrumbs(route) {
     .map((r, i) =>
       i === trail.length - 1
         ? `<li class="breadcrumb-item active" aria-current="page">${r.title}</li>`
-        : `<li class="breadcrumb-item"><a href="${r.path}" data-route>${r.title}</a></li>`,
+        : `<li class="breadcrumb-item"><a href="${withBase(r.path)}" data-route>${r.title}</a></li>`,
     )
     .join('')}</ol>`;
 }
@@ -74,7 +75,7 @@ function renderNotFound() {
   document.title = 'Страница не найдена · Shell Demo';
   $('#breadcrumbs').innerHTML = '';
   renderNav('');
-  view.innerHTML = `<h1 tabindex="-1" class="h3">Страница не найдена</h1><p><a href="/dashboard" data-route>Вернуться на главную</a></p>`;
+  view.innerHTML = `<h1 tabindex="-1" class="h3">Страница не найдена</h1><p><a href="${withBase('/dashboard')}" data-route>Вернуться на главную</a></p>`;
 }
 
 function render(path) {
@@ -93,7 +94,7 @@ function focusHeading() {
 }
 
 function navigate(path, { push = true } = {}) {
-  if (push && path !== location.pathname) history.pushState({}, '', path);
+  if (push && path !== currentPath()) history.pushState({}, '', withBase(path));
   render(path);
   window.scrollTo(0, 0);
   // Offcanvas open (mobile): close it first, then move focus to the new page heading.
@@ -111,13 +112,14 @@ document.addEventListener('click', (e) => {
   const a = e.target.closest('a[data-route]');
   if (!a) return;
   e.preventDefault();
-  navigate(new URL(a.href).pathname);
+  navigate(stripBase(new URL(a.href).pathname));
 });
 
-window.addEventListener('popstate', () => render(location.pathname));
+window.addEventListener('popstate', () => render(currentPath()));
 
 /* ---------- start ---------- */
 
-if (location.pathname === '/' || location.pathname === '') history.replaceState({}, '', '/dashboard');
+$('.navbar-brand').setAttribute('href', withBase('/dashboard'));
+if (currentPath() === '/') history.replaceState({}, '', withBase('/dashboard'));
 renderContextMenu();
-render(location.pathname);
+render(currentPath());
